@@ -1,6 +1,10 @@
-function [sOut,nLnErr,lnIdxErr,lnStrErr] = HLMoutputParser(hlmOutFile)
+function [sOut,nLnErr,lnIdxErr,lnStrErr] = HLMoutputParser(hlmOutFile,vers)
 %
 % V 1.1, Konrad Schumacher, 2022
+
+if nargin < 2
+    vers = '1.3';
+end
 
 VARIDFILE = fullfile(fileparts(mfilename('fullpath')),'HLMvariableIDs.csv');
 try
@@ -19,7 +23,13 @@ end
 nVarOut = nargout;
 DTimePattrn = '(^\d{4}-\d\d-\d\d_\d\d-\d\d-\d\d(?:\.\d{3})?)'; % 1 token
 HLMdataPattrn = strjoin(repmat({'(-?[\d\.]+)'},1,6),';\\s*'); % 6 token
-TrgRecPattrn = '(TRIGGER|RECORDING_\w+)\s*(\d+\.\d+)?\s*(\d+)?'; % 3 token
+
+versNum = str2double(vers);
+if versNum < 1.3
+    TrgRecPattrn = '(TRIGGER|RECORDING_\w+)\s*(\d+\.\d+)?\s*(\d+)?'; % 3 token
+else
+    TrgRecPattrn = '(TRIGGER|RECORDING_\w+)\s*(\d+\.\d+)?\s*(\d+)?\s*(\d+\.\d+)?'; % 4 token
+end
 
 vidsArr = table2array(VIDs(:,2:4));
 assert(size(vidsArr,1) == size(unique(vidsArr,'rows'),1), ...
