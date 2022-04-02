@@ -31,8 +31,8 @@ classdef HLMstreamer < A_SERIAL_STREAMER
                 catch ME
                     app.setStatus('error');
                     app.setStatusMsg('Error while reading data from serial port.');
-                    figure(app.SuperStreamerUIFigure);
-                    uialert(app.SuperStreamerUIFigure, ...
+                    figure(app.SerialStreamerUIFigure);
+                    uialert(app.SerialStreamerUIFigure, ...
                         sprintf('There was an error while reading serial port.\nSee command line for further details.'), ...
                         'Error while receiving data');
                     rethrow(ME);
@@ -51,8 +51,8 @@ classdef HLMstreamer < A_SERIAL_STREAMER
                 catch ME
                     app.setStatus('error');
                     app.setStatusMsg('Error while saving serial port data.');
-                    figure(app.SuperStreamerUIFigure);
-                    uialert(app.SuperStreamerUIFigure, ...
+                    figure(app.SerialStreamerUIFigure);
+                    uialert(app.SerialStreamerUIFigure, ...
                         sprintf('There was an unhandled error while saving serial port data.\nSee command line for further details.'), ...
                         'Error while saving data');
                     rethrow(ME);
