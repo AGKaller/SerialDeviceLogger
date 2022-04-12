@@ -4,6 +4,7 @@ classdef INVOSstreamer < A_SERIAL_STREAMER
     properties
         SerialPortParam = {9600, 'Timeout',1};
         SerialPortTerminator = [];
+        SampleRate = 6;
     end
     
     properties (Constant)

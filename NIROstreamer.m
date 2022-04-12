@@ -4,7 +4,7 @@ classdef NIROstreamer < A_SERIAL_STREAMER
     properties
         SerialPortParam = {9600, 'Timeout',1};
         SerialPortTerminator = [];
-        SampleRate = 1;
+        SampleRate = .5;
     end
     
     properties (Constant)
@@ -25,8 +25,8 @@ classdef NIROstreamer < A_SERIAL_STREAMER
                 catch ME
                     app.setStatus('error');
                     app.setStatusMsg('Error while reading data from serial port.');
-                    figure(app.INVOSstreamerUIFigure);
-                    uialert(app.INVOSstreamerUIFigure, ...
+                    figure(app.SerialStreamerUIFigure);
+                    uialert(app.SerialStreamerUIFigure, ...
                         sprintf('There was an error while reading serial port.\nSee command line for further details.'), ...
                         'Error while receiving data');
                     rethrow(ME);
@@ -48,8 +48,8 @@ classdef NIROstreamer < A_SERIAL_STREAMER
                 catch ME
                     app.setStatus('error');
                     app.setStatusMsg('Error while saving serial port data.');
-                    figure(app.INVOSstreamerUIFigure);
-                    uialert(app.INVOSstreamerUIFigure, ...
+                    figure(app.SerialStreamerUIFigure);
+                    uialert(app.SerialStreamerUIFigure, ...
                         sprintf('There was an unhandled error while saving serial port data.\nSee command line for further details.'), ...
                         'Error while saving data');
                     rethrow(ME);

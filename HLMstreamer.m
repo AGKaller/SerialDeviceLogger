@@ -11,6 +11,7 @@ classdef HLMstreamer < A_SERIAL_STREAMER
                             'Timeout',      1 ...              default: 10
                             };
         SerialPortTerminator = 3;
+        SampleRate = 10;
     end
     
     properties (Constant)
