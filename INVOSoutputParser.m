@@ -83,6 +83,7 @@ assert(fid>-1,'Failed to open file\n ''%s''\n%s',invosLog,err);
 tline = fgetl(fid);
 ln = 0;
 lnFile = 0;
+timedateFrmts = {'yyyy-mm-dd_HH-MM-SS','yyyy-mm-dd_HH-MM-SS.FFF'};
 
 % LOOP LINES ..............................................................
 while ischar(tline)
@@ -97,7 +98,18 @@ while ischar(tline)
     
     % get computer time stamp
     try
-        t_pc = datenum(cols{1},'yyyy-mm-dd_HH-MM-SS');
+        t_pc = [];
+        for k = 1:numel(timedateFrmts)
+            try
+                t_pc = datenum(cols{1},timedateFrmts{k});
+                break;
+%             catch ME
+            end
+        end
+        if isempty(t_pc)
+            error('INVOSoutputParser:gettingTimeStampFailed',...
+                'Failed to convert time stamp');
+        end
     catch ME
         baseME = MException('INVOSoutputParser:unrecognizedLine',...
                 'Failed to parse line #%d:\n %s',lnFile, tline);
