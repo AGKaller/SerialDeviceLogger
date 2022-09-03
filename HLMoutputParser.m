@@ -1,6 +1,24 @@
-function [sOut,nLnErr,lnIdxErr,lnStrErr] = HLMoutputParser(hlmOutFile,vers)
+function [sOut,nLnErr,lnIdxErr,lnStrErr,unrecognLines] = HLMoutputParser(hlmOutFile,vers)
 %
-% V 1.1, Konrad Schumacher, 2022
+% V 1.2, Konrad Schumacher, 2022
+
+% Each HLM sample contain 6 numbers.
+% 1-3 identifies variables, see HLMvariableIDs.csv
+% 4 is the acutal data (stored in sOut)
+% 5 represents the unit: (stored in sOut)
+%     10   FLOW
+%      2   DRUCK
+%      1   Temp
+%      9   Freq
+%      7   Saturation/HCT 
+%     19   Sekunden (Timer)
+%     17   Sekunden  (Uhrzeit AM)
+%     18   Sekunden  (Uhrzeit PM)
+%     16   Liter
+% 6 still unknown... some 8 bit number (always between 0 & 255!), maybe a
+%           checksum?
+
+% TODO: replace str2double with something faster...
 
 if nargin < 2
     vers = '1.3';
@@ -40,6 +58,7 @@ dOut = cell(size(varNames));
 nIDs = numel(varNames);
 vidsArrCS = compose('%d',[vidsArr;nan(abs([nIDs 0] - size(vidsArr)))]);
 
+unrecognLines = {};
 lnIdxErr = [];
 nLnErr = 0;
 lnStrErr = {};
@@ -76,6 +95,9 @@ while ischar(tline)
     else % save HLM data:
         idIdx = all(strcmp(repmat(mtch(2:4),nIDs,1),vidsArrCS),2);
         if ~any(idIdx) % don't know this ID
+            if nargout>4
+                unrecognLines = [unrecognLines; mtch];
+            end
             tline = fgetl(fid);
             continue;
         end
@@ -109,6 +131,10 @@ dOut(iConvert) = cellfun(@(x)convertTStmp(x),...
 
 
 sOut = cell2struct(dOut,varNames,2);
+
+if ~isempty(unrecognLines)
+    unrecognLines = {convertTStmp(unrecognLines(:,1)) str2double(unrecognLines(:,2:end))};
+end
 
 end
 
