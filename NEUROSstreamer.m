@@ -1,15 +1,15 @@
-classdef HASCHIP4streamer < A_SERIAL_STREAMER
+classdef NEUROSstreamer < A_SERIAL_STREAMER
     
     % TODO: Check, revise scomCallback!
     
     properties
         SerialPortParam = {9600, 'Timeout',1};
         SerialPortTerminator = [];
-        SampleRate = .2;
+        SampleRate = .1;
     end
     
     properties (Constant)
-        DEVICENAME = 'HASCHIP4';
+        DEVICENAME = 'NeurOS';
     end
    
 
@@ -20,7 +20,7 @@ classdef HASCHIP4streamer < A_SERIAL_STREAMER
         function scomCallback(app,src,~)
             nlOut = 0;
             data = {}; tstmp = {};
-            while src.NumBytesAvailable > HASCHIP4streamer.MinBytesPerLine
+            while src.NumBytesAvailable > NEUROSstreamer.MinBytesPerLine
                 try
                     d = char(src.readline());
                 catch ME
@@ -37,7 +37,7 @@ classdef HASCHIP4streamer < A_SERIAL_STREAMER
                     d = strtrim(d);
                     if ~isempty(d)
                         data{end+1} = d;
-                        tstmp{end+1} = HASCHIP4streamer.TimeStamp();
+                        tstmp{end+1} = NEUROSstreamer.TimeStamp();
                         nlOut = nlOut + 1;
                     end
                 else, break;
