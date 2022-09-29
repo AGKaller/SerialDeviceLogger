@@ -3,9 +3,9 @@ classdef HASCHIP4streamer < A_SERIAL_STREAMER
     % TODO: Check, revise scomCallback!
     
     properties
-        SerialPortParam = {9600, 'Timeout',1};
+        SerialPortParam = {115200, 'Timeout',1};
         SerialPortTerminator = [];
-        SampleRate = .2;
+        SampleRate = 2;
     end
     
     properties (Constant)
